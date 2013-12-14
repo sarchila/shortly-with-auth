@@ -131,17 +131,17 @@ post '/signup' do
 end
 
 post '/api/signup' do
-    # user = User.find_by_username(params[:username])
-    # unless user.nil?
-        # [403, {error: 'User not found'}.to_json]
-    # else
+    user = User.find_by_username(params[:username])
+    unless user.nil?
+        [403, {error: 'User not found'}.to_json]
+    else
         user = User.create username: params[:username], password: params[:password]
         if user.valid?
             [200, {token: user.identifier}.to_json]
         else
             [401, {error: user.valid?}.to_json]
         end
-    # end
+    end
 end
 
 get "/logout" do
