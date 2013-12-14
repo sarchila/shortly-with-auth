@@ -1,0 +1,12 @@
+<input type="text" placeholder="Search" ng-model="searchLinks.title">
+<div>
+  <a href="" ng-click="criteria = 'updated_at'">Hottest</a> 
+  <a href="" ng-click="criteria = 'created_at'">Created</a> 
+  <a href="" ng-click="criteria = 'visits'">Visited</a>
+</div>
+<ul>
+  <li ng-repeat="link in links | filter:searchLinks | orderBy:criteria:true track by link.id">
+    <a ng-href="{{ link.base_url }}/{{ link.code }}">{{ link.title }}</a> 
+    <span>{{ link.visits }}</span>
+  </li>
+</ul>

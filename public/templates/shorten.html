@@ -1,0 +1,4 @@
+<form ng-submit="linkSubmit()" name="myForm">
+  <input type="url" name="urlInput" ng-model="url"/>
+  <span class="error" ng-show="myForm.urlInput.$error.url">Not valid url!</span>
+</form>
