@@ -1,5 +1,7 @@
-<form ng-submit="postNewUser()">
+<h1>Shortly {{ signin }}</h1>
+<form ng-submit="handleUser()">
   <input type="text" ng-model="userName" placeholder="Username"/>
   <input type="password" ng-model="userPass" placeholder="Password"/>
   <button type='submit'>Submit</button>
 </form>
+<a href="/#/login">Log In</a>  | Don't have an account? <a href="/#/signup">Sign Up!</a>

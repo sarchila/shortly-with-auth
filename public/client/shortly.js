@@ -11,14 +11,14 @@ angular.module('shortly', ['ngRoute', 'ngCookies'])
       controller: 'ShortenController'
     })
     .when('/signup',{
-      templateUrl: 'templates/signup.html',
-      controller: 'signupController'
+      templateUrl: 'templates/signin.html',
+      controller: 'signinController'
     })
     .when('/login',{
-      templateUrl: 'templates/signup.html',
-      controller: 'loginController'
+      templateUrl: 'templates/signin.html',
+      controller: 'signinController'
     })
-    .otherwise({redirectTo: '/'});
+    // .otherwise({redirectTo: '/'});
 
 })
 .controller('MainController', function($scope, $http, $cookies, $location) {
@@ -30,13 +30,12 @@ angular.module('shortly', ['ngRoute', 'ngCookies'])
       $scope.links = data;
     });
   } else {
-    $location.path('/signup'); // CHANGE THIS TO LOGIN WHEN WE CREATE LOGIN
+    $location.path('/login');
   }
-
 })
 .controller('ShortenController', function($scope, $http, $cookies, $location) {
   if (!$cookies.userToken){
-    $location.path('/signup'); // CHANGE THIS TO LOGIN WHEN WE CREATE LOGIN
+    $location.path('/login');
   } else {
     $scope.linkSubmit = function(){
       $http({
@@ -53,19 +52,23 @@ angular.module('shortly', ['ngRoute', 'ngCookies'])
   }
 })
 
-.controller('signupController', function($scope, $http, $cookies, $location){
+.controller('signinController', function($scope, $http, $cookies, $location){
 
-  // Check if user is logged in.
+  $scope.signin = $location.path().slice(1);
+  
+  // Checks if user is logged in
   if($cookies.userToken) {
     $location.path('/');
   }
 
-  $scope.postNewUser = function(){
-    // console.log(this);
-
+  $scope.handleUser = function(){
     $http({
       method: 'POST',
-      url: '/api/signup?username=' + this.userName + '&password=' + this.userPass,
+      url: '/api' + $location.path(),
+      params: {
+        username: this.userName,
+        password: this.userPass
+      }
     }).success(function(data, status, headers, config) {
       console.log('Success!', data);
       // set cookie data.token
