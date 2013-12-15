@@ -160,8 +160,12 @@ post '/links' do
     data = JSON.parse request.body.read
     uri = URI(data['url'])
     raise Sinatra::NotFound unless uri.absolute?
-    link = Link.find_by_url(uri.to_s) ||
-           Link.create( url: uri.to_s, title: get_url_title(uri) )
+    if Link.find_by_url(uri.to_s)
+      link = Link.find_by_url(uri.to_s)
+      link[:exists] = true
+    else
+      link = Link.create( url: uri.to_s, title: get_url_title(uri) )
+    end
     link.as_json.merge(base_url: request.base_url).to_json
 end
 

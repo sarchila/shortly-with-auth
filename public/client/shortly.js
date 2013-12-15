@@ -33,20 +33,26 @@ angular.module('shortly', ['ngRoute', 'ngCookies'])
     $location.path('/login');
   }
 })
-.controller('ShortenController', function($scope, $http, $cookies, $location) {
+.controller('ShortenController', function($scope, $http, $cookies, $location, $sce) {
   if (!$cookies.userToken){
     $location.path('/login');
   } else {
+
     $scope.linkSubmit = function(){
+      console.log(this.url);
       $http({
         method: 'POST',
         url: '/links',
         data: { url: this.url }
       }).success(function(data){
+        var successMsg = "Successfully shortened with URL: <a href='"+ data.base_url + '/' + data.code +"'>" + data.base_url + '/' + data.code + "</a>";
+        $scope.msg = data.exists ? $sce.trustAsHtml("URL already exists") : $sce.trustAsHtml(successMsg);
         $scope.url = '';
-        console.log('Success!', data);
+        console.log('Success! ', data);
       }).error(function(err){
-        console.log('Error!', err);
+        console.log('Error!');
+        $scope.msg = 'domain name does not exist';
+        $scope.url = '';
       });
     };
   }
@@ -55,7 +61,7 @@ angular.module('shortly', ['ngRoute', 'ngCookies'])
 .controller('signinController', function($scope, $http, $cookies, $location){
 
   $scope.signin = $location.path().slice(1);
-  
+
   // Checks if user is logged in
   if($cookies.userToken) {
     $location.path('/');
